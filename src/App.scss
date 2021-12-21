@@ -65,7 +65,8 @@
 .game__gamerChoices{
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .game__chosenWeapon-wrapper{
@@ -113,9 +114,20 @@
 
 }
 
+.game__gamers{
+  display: flex;
+  justify-content: space-between;
+}
+
 .game__roundResults{
   display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game__finalResult{
+  display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
