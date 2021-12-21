@@ -118,6 +118,7 @@ const App = () => {
     }, [wins.userWins, wins.computerWins])
 
   return (
+
       <div className="app">
           <h1>Čikāsimies!?</h1>
           <div className="settings">
@@ -203,10 +204,11 @@ const App = () => {
                       </div>
                   </div>
                   {wins.userWins === roundsToPlay &&
+
                           <ReactConfetti
                               width={1500}
-                              height={1500}
-                              numberOfPieces={200}
+                              height={700}
+                              numberOfPieces={300}
                           />
                   }
               </>}
