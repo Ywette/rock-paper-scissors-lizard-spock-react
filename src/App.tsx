@@ -20,13 +20,6 @@ type WinsProps ={
     computerWins: number,
 }
 
-// const choices = [
-//     {name: "rock", image: rock},
-//     {name: "paper", image: paper},
-//     {name: "scissors", image: scissors},
-//     {name: "lizard", image: lizard},
-//     {name: "spock", image: spock},
-// ]
 const choices = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
 
 const App = () => {
@@ -51,7 +44,6 @@ const App = () => {
     const generateComputerChoice = () => {
         const randomChoice = choices[Math.floor(Math.random() * choices.length)];
         setComputerChoice(randomChoice)
-        console.log(randomChoice)
     }
 
     const getWeaponImage=(value: string)=>{
@@ -67,8 +59,8 @@ const App = () => {
             case 'spock':
                 return spock;
         }
-
     }
+
     const checkResult = () =>{
         switch(userChoice + computerChoice){
             case 'scissorspaper':
@@ -81,7 +73,7 @@ const App = () => {
             case 'paperspock':
             case 'spockrock':
             case 'rockscissors':
-                setResult('You WIN!')
+                setResult('Punts Tev!')
                 setWins({...wins, userWins: wins.userWins + 1})
                 break
             case 'paperscissors':
@@ -94,7 +86,7 @@ const App = () => {
             case 'spockpaper':
             case 'rockspock':
             case 'scissorsrock':
-                setResult('You LOSE!')
+                setResult('Punkts BOTAM!')
                 setWins({...wins, computerWins: wins.computerWins + 1})
                 break
             case 'rockrock':
@@ -102,7 +94,7 @@ const App = () => {
             case 'scissorsscissors':
             case 'lizardlizard':
             case 'spockspock':
-                setResult('Its a DRAW!')
+                setResult('Neizšķirts!')
                 break
         }
     }
@@ -120,117 +112,111 @@ const App = () => {
     }, [wins.userWins, wins.computerWins])
 
   return (
-              <div className="app">
-                  <h1>čikāsimies</h1>
-                  <div className="game__settings">
-                      <label className="label">Spēlēsim līdz
-                          <input className="input input-rounds m-15" type="number"
+      <div className="app">
+          <h1>čikāsimies</h1>
+          <div className="settings">
+              <label className="settings__label">Spēlēsim līdz
+                  <input className="input input-rounds m-15" type="number"
+                         onChange={(e) => {
+                             setRoundsToPlay(parseInt(e.target.value))
+                         }
+                         }/> uzvarām
+              </label>
+
+              {!toggleStart &&
+                  <>
+                      <label className="">
+                          <input className="input input-userName m-15"  type="text" value={userName}
+                                 placeholder="Ievadi savu vārdu..."
                                  onChange={(e) => {
-                                     setRoundsToPlay(parseInt(e.target.value))
-                                 }
-                                 }/> uzvarām
+                                     setUserData(e.target.value)
+                                 }}
+                          />
                       </label>
 
-                      {!toggleStart &&
-                          <>
-
-                              <label className="">
-                                  <input className="input input-userName m-15"  type="text" value={userName}
-                                         placeholder="Ievadi savu vārdu..."
-                                         onChange={(e) => {
-                                             setUserData(e.target.value)
-                                         }}
-                                  />
-                              </label>
-
-                              < button className="input button-start m-15"
-                                       onClick={() => {
-                                          if (roundsToPlay > 1 && userName !== '') {
-                                          setToggleStart(true);
-                                          } else {
-                                              alert('Ievadi savu vārdu un līdz cik uzvarām spēlēsi')
-                                          }}
+                      <button className="input button-start m-15"
+                               onClick={() => {
+                                   if (roundsToPlay >= 1 && userName !== '') {
+                                       setToggleStart(true);
+                                   } else {
+                                       alert('Ievadi savu vārdu un līdz cik uzvarām spēlēsi')
+                                   }}
                                 }>
-                                  Sākt spēli
-                              </button>
-                          </> }
-                        </div>
+                          Sākt spēli
+                      </button>
+                  </> }
+          </div>
 
-                  {toggleStart &&
-                      <>
-                          <div className="game">
-                              <div className="game__gamerChoices">
-                                  <div className="game__userChoice">
-                                      <span> {userName} ierocis:</span>
-                                      <br/>
-                                      <div className="game__choiceIcon">
-                                          <img className="game__computerWeapon" src={getWeaponImage(userChoice)}/>
-                                          {/*{getWeaponImage()}*/}
-                                      </div>
-                                  </div>
-                                  <div className="game__computerChoice">
-                                      <span> Bota ierocis:</span>
-                                      <br/>
-                                      <div className="game__choiceIcon">
-                                          <img className="game__computerWeapon" src={getWeaponImage(computerChoice)}/>
-                                      </div>
-                                  </div>
-
+          {toggleStart &&
+              <>
+                  <div className="game">
+                      <div className="game__gamerChoices">
+                          <div className="game__chosenWeapon-wrapper">
+                              <span> {userName.toUpperCase()} ierocis:</span>
+                              <br/>
+                              <div className="game__choiceIcon m-15">
+                                  <img className="game__weaponImg" src={getWeaponImage(userChoice)}/>
                               </div>
-
-                              <span> result: {result}</span>
-
-                              <div className="game__chooseWeapon">
-
-                                  {!gameOver ?
-                                      choices.map((choice, index) => {
-                                          return (
-                                              <div className="game__chooseWeapon-buttons" onClick={() => {
-                                                  handleClick(choice)
-                                              }} key={index}>
-                                                  <img className="game__weaponImage"src={getWeaponImage(choice)}/>
-                                                  {/*{choice}*/}
-                                              </div>)
-                                      })
-                                      : <button onClick={() => {
-                                          setGameOver(false);
-                                          setWins({userWins: 0, computerWins: 0});
-                                          setUserChoice('');
-                                          setComputerChoice('');
-                                          setRoundCount(0);
-                                          setRoundsToPlay(0);
-                                          window.location.reload()
-                                      }}
-                                      >restart game</button>
-                                  }
-                              </div>
-
+                              <span className="game__playerPoints">{wins.userWins}</span>
                           </div>
-                          <div className="results">
-                              <span>Rounds: {roundCount}</span>
-                              <div className="result-table">
-                                  <span>{userName} : {wins.userWins}</span>
-                                  <span>Computer: {wins.computerWins}</span>
-                              </div>
+
+                          <div className="game__roundResults">
+                              <span>Spēle: {roundCount}</span>
+                              <span>{result}</span>
                           </div>
-                          {wins.userWins === roundsToPlay &&
-                              <>
-                                  <span>You are the winner!</span>
-                                  <ReactConfetti
-                                      width={1500}
-                                      height={1500}
-                                      numberOfPieces={200}
-                                  />
-                              </>
+
+
+                          <div className="game__chosenWeapon-wrapper">
+                              <span> BOTA ierocis:</span>
+                              <br/>
+
+                              <div className="game__choiceIcon m-15">
+                                  <img className="game__weaponImg" src={getWeaponImage(computerChoice)}/>
+                              </div>
+                              <span>{wins.computerWins}</span>
+                          </div>
+                      </div>
+
+
+
+                      <div className="game__chooseWeapon">
+
+                          {!gameOver ?
+                              choices.map((choice, index) => {
+                                  return (
+                                      <div className="game__chooseWeapon-buttons" onClick={() => {
+                                          handleClick(choice)
+                                      }} key={index}>
+                                          <img className="game__weaponImage"src={getWeaponImage(choice)}/>
+                                          {/*{choice}*/}
+                                      </div>)
+                              })
+                              : <button className="input button-start m-15" onClick={() => {
+                                  window.location.reload()
+                              }}
+                              >restart game</button>
                           }
-                          {wins.computerWins === roundsToPlay && <span>You lost this time :(</span>}
-                          {/*{gameOver && <button onClick={()=>window.location.reload()}>restart game</button>}*/}
-                      </>}
-              </div>
+                      </div>
+
+                  </div>
+                  <div className="results">
+                      <span>Spēle: {roundCount}</span>
+                  </div>
+                  {wins.userWins === roundsToPlay &&
+                      <>
+                          <span>You are the winner!</span>
+                          <ReactConfetti
+                              width={1500}
+                              height={1500}
+                              numberOfPieces={200}
+                          />
+                      </>
+                  }
+                  {wins.computerWins === roundsToPlay && <span>You lost this time :(</span>}
+                  {/*{gameOver && <button onClick={()=>window.location.reload()}>restart game</button>}*/}
+              </>}
+      </div>
   );
-
 };
-
-
 
 export default App;
